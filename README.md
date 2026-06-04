@@ -27,7 +27,7 @@ To compute the weekday of a particular date, you have to find a reference weekda
 
 All calculations related to weekdays have to be done by applying the "modulo 7" (%) operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down.
 
-Dates are represented using the day/month/year format. The first number is always the amount of days within a month, not the number representing the month itself.
+Dates are represented using the `day/month` and `day/month/year` format. The first number is always the amount of days within a month, not the number representing the month itself.
 
 ---
 
@@ -49,6 +49,9 @@ When changing the reference decade, you have to follow the 1-2-1-2 pattern:
 | Tuesday (1) | Monday (0) | Saturday (5) | Friday (4) | Wednesday (2) | Tuesday (1) | Sunday (6) | Saturday (5) | Thursday (3) | Wednesday (2) |
 
 Notice how the reference weekday increases when going backwards through decades - this can be deduced from the two memorized 2000-Tuesday and 1990-Wednesday reference decades. Since the difference between those two is 1, the next step between decades changes by 2 instead: 1990-Wednesday -> 1980-Friday, with the next decade step changing by only 1 again. It works similarly when going up the other way, just mind the direction: 2000-Tuesday -> 2010-Sunday. This is how you can use the two reference decades and the 1-2-1-2 rule to figure out the reference decade.
+
+> [!Note]
+> These rules don't work for years 1900 and 2100, as those don't count as leap years and that'd have to be accounted for with another rule. Thus, the maximum theorethical years range for these rules is 1901-2099.
 
 ## Finding the reference weekday for a given year
 
@@ -132,8 +135,47 @@ For ex. if the final deduced weekday would be a Saturday, for a leap year and ei
 
 ## Putting it all together
 
+Combining the three steps of figuring out the year's reference weekday, day-month offset and applying the final exception, you can finally arrive at the deduced weekday. Here's some examples:
 
+- 14th of September, 1986 -> 1980-Friday +6+1=Friday -> 5/9 anchor -> 14-5 mod 7 = +2 offset from Friday -> Sunday
+- 27th of March, 1997 -> 1990-Wednesday +7+2=Friday -> 7/3 anchor -> 27-7 mod 7 = +6/-1 offset from Friday -> Thursday
+- 8th of February, 2004 -> 2000-Tuesday +4+1=Sunday -> 7/2 anchor -> 8-7 mod 7 = +1 offset, but final exception applies, so +0 offset from Sunday -> Sunday
+- 19th of June, 2016 -> 2010-Sunday +6+2=Monday -> 6/6 anchor -> 19-6 mod 7 = +6/-1 offset from Monday -> Sunday
+- 21st of November, 2026 -> 2020-Saturday +6+1=Saturday -> 7/11 anchor -> 21-7 mod 7 = +0 offset from Saturday -> Saturday
 
 ---
 
+# Practice
 
+The Python script lets you test your deduction skills in the 5 categories/modes explained below. Some technical details:
+
+- There's currently no interface to change the script's configuration, other than by editing the code directly. This may be resolved in future versions of the script.
+- More than one mode can be enabled at the same time. The weights specify how often each deduction type appears relative to the others. Setting the weight to zero prevents the type from appearing.
+- There are three types of input methods: "general value", "offset" and "weekday". General value expects any positive or negative integer, offset expects only a range between -6 and 6, and weekday expects a name of a weekday.
+- The weekday's name can be specified by only typing in enough letters, that allow for distinguishing the one and only weekday that matches. This is done to reduce the time wasted on typing in the answer.
+- The "weekday" input method is currently disabled for `FULL_DATE` and `YEAR_ONLY` modes, and has been replaced by an alternative input method, that significantly speeds up weekday input. The keys ZXCVBNM (the lowest horizontal row of letters on a QWERTY keyboard) are mapped directly to the Monday-Sunday weekdays range. Simply pressing the corresponding key inputs the weekday immediately, without the need of pressing Enter afterwards.
+
+### FULL_DATE: Deduce the weekday for a specific date
+
+You're asked for the weekday of a specific date. Use the ZXCVBNM keys (mapped to the Monday-Sunday range) to answer.
+
+### YEAR_ONLY: Deduce the reference weekday for a specific year
+
+You're asked for the reference weekday for a specific year. Use the ZXCVBNM keys (mapped to the Monday-Sunday range) to answer.
+The current practice range is set to 1990-2010, but can be changed by modifying `MIN_YEAR` and `MAX_YEAR` values.
+
+### MONTH_ONLY: Deduce all day anchor offsets for a specific month
+
+You're asked for all day anchor offsets for a specific month. Input all of them without spaces to answer.
+Example answer for January: `310172431`, which corresponds to 3rd, 10th, 17th, 24th and 31th of January as anchors.
+The initial `0` can be optionally omitted when inputting the answer for February, March and November.
+
+### DAY_MONTH_ONLY: Deduce the shift value for a specific month and day
+
+You're asked for the shift value for a specific month and day. This can only range between -6 and 6, other values are rejected. A special "(leap)" text may sometimes appear to aid you when applying the final exception.
+
+### DAY_MONTH_REF: Deduce the closest reference day for a given month and day
+
+You're asked for the closest reference day of the month, for a specific month and day. For example, for 10th of September, the closest reference day is 12th of September.
+The closest reference day of the month is always up to 3 days apart from the given date, except for dates near the end of the month, where the last reference day is expected.
+For February, March and November, the "0th" day is also included as a valid option. Note that there's only one correct answer for a given date.
