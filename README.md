@@ -1,6 +1,6 @@
-# WeekdayDeduction
+# WeekdayGuesser
 
-A simple Python script that interrogates your weekday-deduction skills.
+A simple Python script that interrogates your weekday-deduction/guessing skills.
 
 ---
 
