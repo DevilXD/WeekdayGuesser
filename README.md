@@ -2,6 +2,9 @@
 
 A simple Python script that interrogates your weekday-deduction/guessing skills.
 
+> [!Note]
+> Requires Python 3.10+.
+
 ---
 
 # Theory
