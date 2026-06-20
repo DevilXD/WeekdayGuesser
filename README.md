@@ -27,7 +27,8 @@ To compute the weekday of a particular date, you have to find a reference weekda
 
 All calculations related to weekdays have to be done by applying the **"modulo 7" (%)** operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down.
 
-Dates are represented using the `day/month` and `day/month/year` format. The first number is always the amount of days within a month, not the number representing the month itself.
+Anchor dates are represented using the `day/month` format. The first number is always the amount of days within a month, not the number representing the month itself.
+Years may come with their precomputed reference weekday at the end for convenience, ex: **2000-Tuesday**.
 
 ---
 
@@ -58,7 +59,7 @@ You need to memorize a few more things:
 - When counting the years up within a decade, the reference weekday changes up by **1**. When counting down, it changes down by **1**.
 - When going up from a non-leap year to a leap year, the reference weekday changes up by **2** instead. Similarly, when going down from a leap year to a non-leap year, it changes down by **2** instead as well.
 
-Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference day. Here's a few examples:
+Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit, to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference day. Note the format is: `years + leap mod 7 == result`. Here's a few examples:
 
 - 1986 -> 1980-Friday -> 1984 was leap -> `6 + 1 mod 7 == 0` -> +0 offset from Friday -> Friday
 - 1999 -> 1990-Wednesday -> 1992 and 1996 were leap -> `9 + 2 mod 7 == 4` -> +4/-3 offset from Wednesday -> Sunday
