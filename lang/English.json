@@ -1,0 +1,92 @@
+{
+    "weekdays": {
+        "0": {
+            "_int_key": true,
+            "value": "Monday"
+        },
+        "1": {
+            "_int_key": true,
+            "value": "Tuesday"
+        },
+        "2": {
+            "_int_key": true,
+            "value": "Wednesday"
+        },
+        "3": {
+            "_int_key": true,
+            "value": "Thursday"
+        },
+        "4": {
+            "_int_key": true,
+            "value": "Friday"
+        },
+        "5": {
+            "_int_key": true,
+            "value": "Saturday"
+        },
+        "6": {
+            "_int_key": true,
+            "value": "Sunday"
+        }
+    },
+    "months": {
+        "1": {
+            "_int_key": true,
+            "value": "January"
+        },
+        "2": {
+            "_int_key": true,
+            "value": "February"
+        },
+        "3": {
+            "_int_key": true,
+            "value": "March"
+        },
+        "4": {
+            "_int_key": true,
+            "value": "April"
+        },
+        "5": {
+            "_int_key": true,
+            "value": "May"
+        },
+        "6": {
+            "_int_key": true,
+            "value": "June"
+        },
+        "7": {
+            "_int_key": true,
+            "value": "July"
+        },
+        "8": {
+            "_int_key": true,
+            "value": "August"
+        },
+        "9": {
+            "_int_key": true,
+            "value": "September"
+        },
+        "10": {
+            "_int_key": true,
+            "value": "October"
+        },
+        "11": {
+            "_int_key": true,
+            "value": "November"
+        },
+        "12": {
+            "_int_key": true,
+            "value": "December"
+        }
+    },
+    "good": "Good! ({wrong}) ({sign}{time:.2f} s)",
+    "wrong": "Wrong! ({wrong}) ({sign}{time:.2f} s)",
+    "youve_won": "You've won! Score: {score} ({good} good ({good_avg:.3f}s avg), {fast}/{slow} fast/slow ({fast_avg:.3f}s fast avg), {wrong} wrong)",
+    "lose": "You lose! The correct answer was: {answer}",
+    "input": {
+        "weekday": "Input weekday ({score}): ",
+        "shift": "Input the shift value ({score}): ",
+        "closest_ref": "Input the closest reference day ({score}): ",
+        "ref_sequence": "Input the reference days sequence ({score}): "
+    }
+}

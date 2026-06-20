@@ -1,0 +1,92 @@
+{
+    "weekdays": {
+        "0": {
+            "_int_key": true,
+            "value": "Poniedziałek"
+        },
+        "1": {
+            "_int_key": true,
+            "value": "Wtorek"
+        },
+        "2": {
+            "_int_key": true,
+            "value": "Środa"
+        },
+        "3": {
+            "_int_key": true,
+            "value": "Czwartek"
+        },
+        "4": {
+            "_int_key": true,
+            "value": "Piątek"
+        },
+        "5": {
+            "_int_key": true,
+            "value": "Sobota"
+        },
+        "6": {
+            "_int_key": true,
+            "value": "Niedziela"
+        }
+    },
+    "months": {
+        "1": {
+            "_int_key": true,
+            "value": "Styczeń"
+        },
+        "2": {
+            "_int_key": true,
+            "value": "Luty"
+        },
+        "3": {
+            "_int_key": true,
+            "value": "Marzec"
+        },
+        "4": {
+            "_int_key": true,
+            "value": "Kwiecień"
+        },
+        "5": {
+            "_int_key": true,
+            "value": "Maj"
+        },
+        "6": {
+            "_int_key": true,
+            "value": "Czerwiec"
+        },
+        "7": {
+            "_int_key": true,
+            "value": "Lipiec"
+        },
+        "8": {
+            "_int_key": true,
+            "value": "Sierpień"
+        },
+        "9": {
+            "_int_key": true,
+            "value": "Wrzesień"
+        },
+        "10": {
+            "_int_key": true,
+            "value": "Październik"
+        },
+        "11": {
+            "_int_key": true,
+            "value": "Listopad"
+        },
+        "12": {
+            "_int_key": true,
+            "value": "Grudzień"
+        }
+    },
+    "good": "Dobrze! ({wrong} błędów) ({sign}{time:.2f}s)",
+    "wrong": "Źle! ({wrong} błędów) ({sign}{time:.2f}s)",
+    "youve_won": "Wygrałeś! Wynik: {score} ({good} poprawnych ({good_avg:.3f}s średnio), {fast}/{slow} szybkich/wolnych ({fast_avg:.3f}s średnio), {wrong} błędów)",
+    "lose": "Przegrałeś! Prawidłowa odpowiedź to: {answer}",
+    "input": {
+        "weekday": "Podaj dzień tygodnia ({score}): ",
+        "shift": "Podaj wartość przesunięcia ({score}): ",
+        "closest_ref": "Podaj najbliższy dzień odniesienia ({score}): ",
+        "ref_sequence": "Podaj sekwencję dni odniesienia ({score}): "
+    }
+}
