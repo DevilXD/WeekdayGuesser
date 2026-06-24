@@ -32,8 +32,8 @@ default_translation: JsonType = {
         11: "November",
         12: "December",
     },
-    "good": "Good! ({wrong}) ({sign}{time:.2f} s)",
-    "wrong": "Wrong! ({wrong}) ({sign}{time:.2f} s)",
+    "good": "Good! ({wrong} wrong) ({sign}{time:.2f} s)",
+    "wrong": "Wrong! ({wrong} wrong) ({sign}{time:.2f} s)",
     "youve_won": (
         "You've won! Score: {score} ({good} good ({good_avg:.3f}s avg), {fast}/{slow} fast/slow "
         "({fast_avg:.3f}s fast avg), {wrong} wrong)"
@@ -55,7 +55,7 @@ class Translator:
         self._langs: list[str] = []
         # start with (and always copy) the default translation
         self._translation: JsonType = default_translation.copy()
-        # if we're in dev, update the template English.json file
+        # update the template English.json file
         json_save(LANG_PATH.joinpath(f"{self.DEFAULT_LANG}.json"), default_translation)
         self._translation["language_name"] = self.DEFAULT_LANG
         # load available translation names
