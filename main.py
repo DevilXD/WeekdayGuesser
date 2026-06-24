@@ -36,7 +36,7 @@ last_guess: Guess | None = None
 wrong_dates: defaultdict[Guess, int] = defaultdict(int)
 while True:
     wrong_sum: int = sum(wrong_dates.values())
-    score: float = fast + good * SLOW_MULTI - wrong_sum
+    score: float = fast + good * SLOW_MULTI
     win_threshold: float = check_win_threshold(100, wrong)
     progress: float = min(max(score / win_threshold, 0.0), 1.0)
     if score >= win_threshold and (wrong_sum <= 0 or score >= win_threshold * 2):
