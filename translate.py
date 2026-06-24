@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import abc
 
-from typing import Any, overload
+from typing import Any
 
 from constants import LANG_PATH
 from utils import JsonType, json_save, json_load
@@ -90,14 +90,6 @@ class Translator:
             if "language_name" in self._translation:
                 raise ValueError("Translations cannot define 'language_name'")
         self._translation["language_name"] = language
-
-    @overload
-    def __call__(self, *path: str) -> str:
-        ...
-
-    @overload
-    def __call__(self, *path: str | int) -> Any:
-        ...
 
     def __call__(self, *path: str | int) -> Any:
         if not path:
