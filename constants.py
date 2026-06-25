@@ -21,3 +21,9 @@ MONTHS_DATA: dict[int, tuple[int, int]] = {
     11: (30, 7),
     12: (31, 5),
 }
+
+_LOCAL_LANG_PATH = Path("local.lang")
+LOCAL_LANG: str | None = None
+if _LOCAL_LANG_PATH.exists():
+    with _LOCAL_LANG_PATH.open('r', encoding="utf8") as file:
+        LOCAL_LANG = file.read().strip()

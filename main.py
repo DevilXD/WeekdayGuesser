@@ -20,7 +20,8 @@ from utils import (  # noqa
     check_win_threshold,
 )
 
-TR.set_language("English")  # use this to change language to any supported by the lang folder
+
+# TR.set_language("English")  # use this to change language to any supported by the lang folder
 
 
 fast: int = 0

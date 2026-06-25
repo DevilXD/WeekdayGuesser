@@ -4,7 +4,7 @@ from collections import abc
 
 from typing import Any
 
-from constants import LANG_PATH
+from constants import LANG_PATH, LOCAL_LANG
 from utils import JsonType, json_save, json_load
 
 
@@ -65,6 +65,9 @@ class Translator:
         if self.DEFAULT_LANG in self._langs:
             self._langs.remove(self.DEFAULT_LANG)
         self._langs.insert(0, self.DEFAULT_LANG)
+        # set local lang if possible
+        if LOCAL_LANG is not None:
+            self.set_language(LOCAL_LANG)
 
     @property
     def languages(self) -> abc.Iterable[str]:
