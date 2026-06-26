@@ -9,6 +9,8 @@ FAST_THRESHOLD: float = 10.0
 # False: The game teaches you by showing the guesses you've got wrong again
 # True: The game instantly ends on the first wrong answer
 LOSE_INSTANTLY: bool = False
+# Set to True to speak the dates instead of showing them as text
+USE_SPEECH: bool = False
 # The weighted frequency for each type of guess that can appear
 # Only relative weights matter. Set to zero to disable.
 GUESS_CHANCES: dict[GuessType, float] = {

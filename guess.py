@@ -106,6 +106,10 @@ class Guess:
             a = (a - 1) % 7
         return a
 
+    def speak_answer(self) -> None:
+        from translate import TR  # circular import
+        TR.speak(str(self))
+
     def _choose_year(self) -> int:
         return random.randint(self.YEAR_MIN, self.YEAR_MAX)
         # return round(self.YEAR_MIN + random.betavariate(4, 4) * (self.YEAR_MAX - self.YEAR_MIN))

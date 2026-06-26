@@ -79,6 +79,10 @@
             "value": "Grudzień"
         }
     },
+    "speaker": {
+        "name": "Poland",
+        "flavor": "GOSIA"
+    },
     "leap": "przestępny",
     "good": "Dobrze! ({wrong} błędów) ({sign}{time:.2f}s)",
     "wrong": "Źle! ({wrong} błędów) ({sign}{time:.2f}s)",

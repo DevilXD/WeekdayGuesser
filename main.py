@@ -7,7 +7,7 @@ from collections import defaultdict
 from translate import TR
 from guess import Guess, GuessType
 from constants import MAX_ANSWER_TIME
-from settings import SLOW_MULTI, FAST_THRESHOLD, LOSE_INSTANTLY
+from settings import SLOW_MULTI, FAST_THRESHOLD, LOSE_INSTANTLY, USE_SPEECH
 from utils import (  # noqa
     uinput,
     uinput2,
@@ -64,7 +64,10 @@ while True:
 
     ask_time: float = time()
     exp_answer: int = guess.answer()
-    print(guess)
+    if USE_SPEECH:
+        guess.speak_answer()
+    else:
+        print(guess)
     print()
     score_text: str = f"{score:.1f}/{win_threshold:.1f}"
     match guess.type:

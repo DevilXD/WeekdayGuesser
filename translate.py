@@ -7,6 +7,8 @@ from typing import Any
 from constants import LANG_PATH, LOCAL_LANG
 from utils import JsonType, json_save, json_load
 
+import yapper
+
 
 default_translation: JsonType = {
     "weekdays": {
@@ -31,6 +33,16 @@ default_translation: JsonType = {
         10: "October",
         11: "November",
         12: "December",
+    },
+    "speaker": {
+        # yapper-tts supported speaker names:
+        # Belgium, Brazil, Catalonia, China, Congo, Czech, Denmark, Finland, France, GB, Georgia,
+        # Germany, Greece, Hungary, Iceland, Iran, Italy, Jordan, Kazakhstan, Latvia, Luxembourg,
+        # Mexico, Nepal, Netherlands, Norway, Poland, Portugal, Romania, Russia, Serbia, Slovakia,
+        # Slovenia, Spain, Sweden, Turkey, Ukraine, US, Vietnam, Wales
+        "name": "US",
+        # Flavors are language-dependent - see yapper-tts documentation
+        "flavor": "AMY",
     },
     "leap": "leap",
     "good": "Good! ({wrong} wrong) ({sign}{time:.2f} s)",
@@ -70,6 +82,13 @@ class Translator:
         if LOCAL_LANG is not None:
             self.set_language(LOCAL_LANG)
 
+        # Speaker init
+        speaker_key: dict[str, str] = self._translation["speaker"]
+        speaker_flavor: yapper.enums.PiperVoice = getattr(
+            getattr(yapper, f"PiperVoice{speaker_key['name']}"), speaker_key["flavor"]
+        )
+        self._speaker = yapper.PiperSpeaker(voice=speaker_flavor)
+
     @property
     def languages(self) -> abc.Iterable[str]:
         return iter(self._langs)
@@ -77,6 +96,9 @@ class Translator:
     @property
     def current(self) -> str:
         return self._translation["language_name"]
+
+    def speak(self, text: str) -> None:
+        self._speaker.say(text)
 
     def set_language(self, language: str):
         if language not in self._langs:
