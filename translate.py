@@ -32,6 +32,7 @@ default_translation: JsonType = {
         11: "November",
         12: "December",
     },
+    "leap": "leap",
     "good": "Good! ({wrong} wrong) ({sign}{time:.2f} s)",
     "wrong": "Wrong! ({wrong} wrong) ({sign}{time:.2f} s)",
     "youve_won": (

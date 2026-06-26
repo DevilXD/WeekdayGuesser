@@ -79,6 +79,7 @@
             "value": "Grudzień"
         }
     },
+    "leap": "przestępny",
     "good": "Dobrze! ({wrong} błędów) ({sign}{time:.2f}s)",
     "wrong": "Źle! ({wrong} błędów) ({sign}{time:.2f}s)",
     "youve_won": "Wygrałeś! Wynik: {score} ({good} poprawnych ({good_avg:.3f}s średnio), {fast}/{slow} szybkich/wolnych ({fast_avg:.3f}s średnio), {wrong} błędów)",

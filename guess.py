@@ -41,7 +41,7 @@ class Guess:
             case GuessType.DAY_MONTH_ONLY | GuessType.DAY_MONTH_REF:
                 leap_text: str = ""
                 if self.year == 0 and (self.month <= 2 or random.random() < 0.4):
-                    leap_text = " (leap)"
+                    leap_text = f" ({TR('leap')})"
                 return f"{self.day} {TR("months", self.month)}{leap_text}"
             case GuessType.YEAR_ONLY:
                 return str(self.year)
