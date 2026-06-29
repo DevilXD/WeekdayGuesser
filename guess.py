@@ -13,9 +13,6 @@ class GuessType(Enum):
 
 
 class Guess:
-    YEAR_MIN: int = 1990
-    YEAR_MAX: int = 2010
-
     def __init__(self, guess_type: GuessType):
         self.type = guess_type
         self.day: int = 0
@@ -71,7 +68,8 @@ class Guess:
         # usually a number representing a weekday or offset
         # For GuessType.MONTH_ONLY, the answer is the day offset for a given month
         # NOTE: Only supports years 1901-2099
-        month_offset: int = MONTHS_DATA[self.month][1]
+        if self.type is not GuessType.YEAR_ONLY:
+            month_offset: int = MONTHS_DATA[self.month][1]
         match self.type:
             case GuessType.MONTH_ONLY:
                 return int(
@@ -111,7 +109,8 @@ class Guess:
         TR.speak(str(self))
 
     def _choose_year(self) -> int:
-        return random.randint(self.YEAR_MIN, self.YEAR_MAX)
+        from settings import YEAR_MIN, YEAR_MAX  # circular import
+        return random.randint(YEAR_MIN, YEAR_MAX)
         # return round(self.YEAR_MIN + random.betavariate(4, 4) * (self.YEAR_MAX - self.YEAR_MIN))
 
     def _choose_day_month(self) -> tuple[int, int]:
