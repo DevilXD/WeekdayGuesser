@@ -220,7 +220,7 @@ def check_win_threshold(
 
 
 def get_repeat_chance(
-    wrong: int,            # amount of wrong guesses
+    repeat_sum: int,       # amount of repeats remaining
     progress: float,       # 0-1 progress of the round
     x_limit: int = 20,     # for any k_factor, the chance for this limit maxes at y_limit percent
     y_limit: float = 0.8,  # max chance
@@ -241,7 +241,7 @@ def get_repeat_chance(
     # lin:  1 ~=   4.0% , 2 ~=   8.0%,  3 ~=  12.0% , 5 ~=  20.0% , 10 ~=  40.0% , 15 ~= 60.0%
     k_factor: float = -(x_limit - final_k_factor) * progress + x_limit
     return min(
-        y_limit * (1 - math.exp(-wrong / k_factor)) / (1 - math.exp(-x_limit / k_factor)),
+        y_limit * (1 - math.exp(-repeat_sum / k_factor)) / (1 - math.exp(-x_limit / k_factor)),
         y_limit,  # clamp when wrong > x_limit
     )
 

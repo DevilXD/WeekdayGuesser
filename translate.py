@@ -45,8 +45,8 @@ default_translation: JsonType = {
         "flavor": "AMY",
     },
     "leap": "leap",
-    "good": "Good! ({wrong} wrong) ({sign}{time:.2f} s)",
-    "wrong": "Wrong! ({wrong} wrong) ({sign}{time:.2f} s)",
+    "good": "Good! ({repeat} repeats) ({sign}{time:.2f} s)",
+    "wrong": "Wrong! ({repeat} repeats) ({sign}{time:.2f} s)",
     "youve_won": (
         "You've won! Score: {score} ({good} good ({good_avg:.3f}s avg), {fast}/{slow} fast/slow "
         "({fast_avg:.3f}s fast avg), {wrong} wrong)"

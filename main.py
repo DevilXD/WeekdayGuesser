@@ -34,13 +34,13 @@ fast_sum: float = 0.0
 print()
 repeat_flag: bool = False
 last_guess: Guess | None = None
-wrong_dates: defaultdict[Guess, int] = defaultdict(int)
+repeat_dates: defaultdict[Guess, int] = defaultdict(int)
 while True:
-    wrong_sum: int = sum(wrong_dates.values())
+    repeat_sum: int = sum(repeat_dates.values())
     score: float = fast + good * SLOW_MULTI
     win_threshold: float = check_win_threshold(100, wrong)
     progress: float = min(max(score / win_threshold, 0.0), 1.0)
-    if score >= win_threshold and (wrong_sum <= 0 or score >= win_threshold * 2):
+    if score >= win_threshold and (repeat_sum <= 0 or score >= win_threshold * 2):
         print(
             TR("youve_won").format(
                 score=f"{score:.1f}/{win_threshold}",
@@ -54,8 +54,8 @@ while True:
         )
         break
     for _ in range(100):
-        if repeat_flag and random.random() < get_repeat_chance(wrong_sum, progress):
-            guess = random_from_dict(wrong_dates, k=1)
+        if repeat_flag and random.random() < get_repeat_chance(repeat_sum, progress):
+            guess = random_from_dict(repeat_dates, k=1)
         else:
             guess = Guess(get_guess_type())
         if guess != last_guess:
@@ -96,17 +96,17 @@ while True:
             fast += 1
             fast_sum += answer_time
             repeat_flag = True
-        elif wrong_sum > 30:
+        elif repeat_sum > 30:
             repeat_flag = True
-        if (attempts := wrong_dates.get(guess)) is not None:
-            wrong_dates[guess] -= 1
-            if wrong_dates[guess] <= 0:
-                del wrong_dates[guess]
+        if (attempts := repeat_dates.get(guess)) is not None:
+            repeat_dates[guess] -= 1
+            if repeat_dates[guess] <= 0:
+                del repeat_dates[guess]
         elif answer_time >= FAST_THRESHOLD and score < win_threshold:
-            wrong_dates[guess] += 1
+            repeat_dates[guess] += 1
         print(
             TR("good").format(
-                wrong=sum(wrong_dates.values()),
+                repeat=sum(repeat_dates.values()),
                 sign='>' if answer_time >= MAX_ANSWER_TIME else '',
                 time=answer_time,
             )
@@ -114,7 +114,7 @@ while True:
     else:
         wrong += 1
         repeat_flag = False
-        wrong_dates[guess] += 5 if score < win_threshold else 1
+        repeat_dates[guess] += 5 if score < win_threshold else 1
         if LOSE_INSTANTLY:
             answer_text: str = str(exp_answer)
             if guess.type is GuessType.DAY_MONTH_ONLY:
@@ -124,7 +124,7 @@ while True:
         else:
             print(
                 TR("wrong").format(
-                    wrong=sum(wrong_dates.values()),
+                    repeat=sum(repeat_dates.values()),
                     sign='>' if answer_time >= MAX_ANSWER_TIME else '',
                     time=answer_time,
                 )
