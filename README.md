@@ -11,12 +11,22 @@ A simple Python script that interrogates your weekday-deduction/guessing skills.
 
 It’s possible for you to deduce the weekday of any given date, by following a simple mental algorithm based on the [Doomsday rule](https://en.wikipedia.org/wiki/Doomsday_rule). The Doomsday Algorithm is a method developed by mathematician John Conway, who famously was able to deduce the weekday of any given date in under two seconds.
 
-> [!Note]
-> For simplicity's sake, the explanation below is intentionally modified and limited to a **1901-2099** years theorethical range, and **1990-2010** years practical range. This reduces the mental capacity needed. See the "Extending the years range" section at the end for more information.
->
-> The intended purpose of this is to use it as a party trick for deducing the weekday another person was born on. This works for any other non-birthday date from within the theorethical range though.
+To compute the weekday of a particular date, you have to find a reference weekday for a given year first, and then apply an offset based on the combined month and day of the month.
 
-To compute the weekday of a particular date, you have to find a reference weekday for a given year first, and then apply an offset based on the combined month and day of the month. For the purpose of this explanation, the following weekday representation offset values are used:
+> [!Note]
+> For simplicity's sake, the explanation below is intentionally modified and limited to a **1900-2099** years theorethical range, and **1980-2020** years practical range. See the "Extending the years range" section at the end for more information.
+>
+> The intended purpose of this is to use it as a party trick for deducing the weekday another person was born on. This works for any other date from within the theorethical range though.
+
+---
+
+# Glossary
+
+- Leap year - A year that is either divisible by 400, or is divisible by 4 and isn't divisible by 100. For the practical range, this can be reduced to a simple "divisible by 4" rule.
+- Reference weekday/year/decade/century - The "doomsday weekday" associated with a given year, decade or century, usually represented as a pair in form of "YYYY-Weekday". Years may also come with their precomputed reference weekday at the end for convenience, ex: **2000-Tuesday**.
+- Anchor date - A fixed "day/month" pair, that defines the point in a year where the year’s reference weekday matches the weekday of that date. The first number is always the amount of days within a month, not the number representing the month itself.
+
+All calculations related to weekdays have to be done by applying the **"modulo 7" (%)** operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down. For the purposes of this explanation, the following weekday representation offset values are used:
 
 |   Weekday | +Offset | -Offset |
 | :-------: | :-----: | :-----: |
@@ -28,10 +38,7 @@ To compute the weekday of a particular date, you have to find a reference weekda
 |  Saturday |      +5 |      -2 |
 |    Sunday |      +6 |      -1 |
 
-All calculations related to weekdays have to be done by applying the **"modulo 7" (%)** operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down.
-
-Anchor dates are represented using the `day/month` format. The first number is always the amount of days within a month, not the number representing the month itself.
-Years may come with their precomputed reference weekday at the end for convenience, ex: **2000-Tuesday**.
+Note that, unless stated otherwise, the positive and negative offsets are interchangeable. A `-6` offset is harder to process mentally than a simple `+1` one, hence why most explanations below include both, when applicable.
 
 ---
 
@@ -39,20 +46,20 @@ Years may come with their precomputed reference weekday at the end for convenien
 
 You need to memorize a few things:
 
-- Reference weekday for the year **2000** is **Tuesday (1)**.
-- Reference weekady for the year **1990** is **Wednesday (2)**.
+- Reference weekday for the year **2000** is **Tuesday**.
+- Reference weekday for the year **1990** is **Wednesday**.
 - Changing reference decades follows a **1-2-1-1** pattern. The direction and first step can be deduced from the two memorized reference decades.
 
 When changing the reference decade, you have to follow the 1-2-1-2 pattern:
 
-|        1950 |       1960 |         1970 |       1980 |          1990 |        2000 |       2010 |         2020 |         2030 |          2040 |
-| :---------: | :--------: | :----------: | :--------: | :-----------: | :---------: | :--------: | :----------: | :----------: | :-----------: |
-| Tuesday (1) | Monday (0) | Saturday (5) | Friday (4) | Wednesday (2) | Tuesday (1) | Sunday (6) | Saturday (5) | Thursday (3) | Wednesday (2) |
+|    1950 |   1960 |     1970 |   1980 |      1990 |    2000 |   2010 |     2020 |     2030 |      2040 |
+| :-----: | :----: | :------: | :----: | :-------: | :-----: | :----: | :------: | :------: | :-------: |
+| Tuesday | Monday | Saturday | Friday | Wednesday | Tuesday | Sunday | Saturday | Thursday | Wednesday |
 
-Notice how the reference weekday increases when going backwards through decades - this can be deduced from the two memorized 2000-Tuesday and 1990-Wednesday reference decades. Since the difference between those two memorized years is 1, the next step between decades changes by 2 instead: 1990-Wednesday -> 1980-Friday, with the next decade step changing by only 1 again. It works similarly when going up the other way, just mind the direction: 2000-Tuesday -> 2010-Sunday. This is how you can use the two reference decades and the 1-2-1-2 rule to figure out the reference decade.
+Notice how the reference weekday increases when going backwards through decades - this direction can be deduced from the two memorized **2000-Tuesday** and **1990-Wednesday** reference decades. Since the difference between those two memorized years is 1, the next step between decades changes by 2 instead: **1990-Wednesday** -> **1980-Friday**, with the next decade step changing by only 1 again. It works similarly when going up the other way, just mind the direction: **2000-Tuesday** -> **2010-Sunday**. This is how you can use the two reference decades and the **1-2-1-2** rule to figure out the reference decade that's the closest to your target year.
 
 > [!Note]
-> These rules don't work for years **1900** and **2100**, as those don't count as leap years and that'd have to be accounted for with another rule. Thus, the maximum theorethical years range for these rules is **1901-2099**.
+> These rules can only be applied to the practical years range. See the "Extending the years range" section at the end for more information.
 
 ## Finding the reference weekday for a given year
 
@@ -62,12 +69,13 @@ You need to memorize a few more things:
 - When counting the years up within a decade, the reference weekday changes up by **1**. When counting down, it changes down by **1**.
 - When going up from a non-leap year to a leap year, the reference weekday changes up by **2** instead. Similarly, when going down from a leap year to a non-leap year, it changes down by **2** instead as well.
 
-Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit, to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference day. Note the format is: `years + leap mod 7 == result`. Here's a few examples:
+Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit, to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference day. Note the format is: `(years + leap) mod 7 = result`. Here's a few examples:
 
-- 1986 -> 1980-Friday -> 1984 was leap -> `6 + 1 mod 7 == 0` -> +0 offset from Friday -> Friday
-- 1999 -> 1990-Wednesday -> 1992 and 1996 were leap -> `9 + 2 mod 7 == 4` -> +4/-3 offset from Wednesday -> Sunday
-- 2002 -> 2000-Tuesday -> no leap years -> `2 + 0 mod 7 == 2` -> +2 offset from Tuesday -> Thursday
-- 2014 -> 2010-Sunday -> 2012 was leap -> `4 + 1 mod 7 == 5` -> +5/-2 offset from Sunday -> Friday
+- 1986 -> 1980-Friday -> 1984 was leap -> `(6 + 1) mod 7 = 0` -> +0 offset from Friday -> Friday
+- 1999 -> 1990-Wednesday -> 1992 and 1996 were leap -> `(9 + 2) mod 7 = 4` -> +4/-3 offset from Wednesday -> Sunday
+- 2002 -> 2000-Tuesday -> no leap years -> `(2 + 0) mod 7 = 2` -> +2 offset from Tuesday -> Thursday
+- 2014 -> 2010-Sunday -> 2012 was leap -> `(4 + 1) mod 7 = 5` -> +5/-2 offset from Sunday -> Friday
+- 2026 -> 2020-Saturday -> 2024 was leap -> `(6 + 1) mod 7 = 0` -> +0 offset from Saturday -> Saturday
 
 It's also possible to do this via subtraction, but with a catch - you need to watch out closely for the leap -> non-leap transition, as it's easy to forget to account for it here. For the example year 1999, you can use 2000-Tuesday as the starting point, and simply go back by 1 year. Accounting for the year 2000 being a leap and 1999 being non-leap, you need to substract 2 instead of 1, so for the 2000-Tuesday reference, going back by 2 gives you Sunday immediately. Similarly, going 1 more year back requires you to only substract 1 from the weekday offset (non-leap to non-leap transition), giving you Saturday.
 
@@ -75,30 +83,34 @@ It's also possible to do this via subtraction, but with a catch - you need to wa
 
 The fastest way of arriving at the reference weekday for a particular year, is done by simply memorizing a bunch of year-weekday pairs. You have a lot of flexibility here:
 
-- You can memorize the reference decades only (1980, 1990, 2000, 2010, etc.), allowing you to bypass having to use the 1-2-1-2 rule and calculating the offset.
-- You can memorize a particular range of years (1990-2010 for ex.), allowing you to skip all year-related offset calculations entirely.
+- You can memorize the reference decades only (1980, 1990, 2000, 2010, etc.), allowing you to bypass having to use the **1-2-1-2** rule and calculating the offset.
+- You can memorize a particular range of years (1980-2020 for ex.), allowing you to skip all year-related offset calculations entirely.
 
-The downside here is having to memorize a lot more information, rather than a bunch of rules explaining how to arrive at the answer. The upside is a huge increase in the weekday deduction speed, of course. Going this route is up for you to decide. Here are the pre-computed weekdays for the 1990-2010 years range:
+The downside here is having to memorize a lot more information, rather than a bunch of rules explaining how to arrive at the answer. The upside is a huge increase in the weekday deduction speed, of course. Going this route is up for you to decide. Here are the pre-computed weekdays for the **1980-2020** years range:
 
-|         1990  |          1991 |         1992 |       1993 |       1994 |        1995 |         1996 |          1997 |         1998 |         1999 |        2000 |
-| :-----------: | :-----------: | :----------: | :--------: | :--------: | :---------: | :----------: | :-----------: | :----------: | :----------: | :---------: |
-| Wednesday (2) |  Thursday (3) | Saturday (5) | Sunday (6) | Monday (0) | Tuesday (1) | Thursday (3) |    Friday (4) | Saturday (5) |   Sunday (6) | Tuesday (1) |
-|          2000 |          2001 |         2002 |       2003 |       2004 |        2005 |         2006 |          2007 |         2008 |         2009 |        2010 |
-|   Tuesday (1) | Wednesday (2) | Thursday (3) | Friday (4) | Sunday (6) |  Monday (0) |  Tuesday (1) | Wednesday (2) |   Friday (4) | Saturday (5) |  Sunday (6) |
+| 1980      | 1981      | 1982      | 1983      | 1984      | 1985      | 1986      | 1987      | 1988      | 1989      | 1990      |
+| :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: | :-------: |
+| Friday    | Saturday  | Sunday    | Monday    | Wednesday | Thursday  | Friday    | Saturday  | Monday    | Tuesday   | Wednesday |
+| 1990      | 1991      | 1992      | 1993      | 1994      | 1995      | 1996      | 1997      | 1998      | 1999      | 2000      |
+| Wednesday | Thursday  | Saturday  | Sunday    | Monday    | Tuesday   | Thursday  | Friday    | Saturday  | Sunday    | Tuesday   |
+| 2000      | 2001      | 2002      | 2003      | 2004      | 2005      | 2006      | 2007      | 2008      | 2009      | 2010      |
+| Tuesday   | Wednesday | Thursday  | Friday    | Sunday    | Monday    | Tuesday   | Wednesday | Friday    | Saturday  | Sunday    |
+| 2010      | 2011      | 2012      | 2013      | 2014      | 2015      | 2016      | 2017      | 2018      | 2019      | 2020      |
+| Sunday    | Monday    | Wednesday | Thursday  | Friday    | Saturday  | Monday    | Tuesday   | Wednesday | Thursday  | Saturday  |
 
 ---
 
 ## Finding the weekday offset for a given month and day
 
-This is the second step of the weekday-deduction process. The whole algorithm relies on the idea of anchors: special day-month pairs. **The year's reference weekday lands exactly on those anchors.**
+This is the second step of the weekday-deduction process. The whole algorithm relies on the idea of date anchors: special day-month pairs, for which **the year's reference weekday is the same as the weekday of that date.**
 
 There's a few more rules you need to memorize:
 
-- For all even-numbered months, with **February (2)** as the only exception, the same-numbered day within the month falls on the reference weekday. This gives you **4/4**, **6/6**, **8/8**, **10/10** and **12/12** as anchors.
-- For all other months in order, you need to memorize this sequence: **3-7-7_2-4-5-7**. This gives you **3/1**, **7/2**, **7/3**, **2/5**, **4/7**, **5/9** and **7/14** as anchors.
+- For all even-numbered months, with **February (2)** as the only exception, the same-numbered day within the month falls on the reference weekday. This gives you **4/4**, **6/6**, **8/8**, **10/10** and **12/12** as anchor dates.
+- For all other months in order, you need to memorize this sequence: **3-7-7_2-4-5-7**. This gives you **3/1**, **7/2**, **7/3**, **2/5**, **4/7**, **5/9** and **7/11** as anchors.
 - The **5/9** and **7/11** anchors are reversible, which means that **9/5** and **11/7** can also be treated as anchors. The PI day (**14/3**) is also an anchor, as well as the last day of February (28th for non-leap years, 29th for leap years).
 
-Remember: The year's reference weekday lands exactly on each of those anchors. For example, if the reference weekday is a Monday, that means that **3/1**, **7/2**, **7/3**, **4/4**, **2/5**, **6/6**, **4/7**, **8/8**, **5/9**, **10/10**, **7/11** and **12/12** were all Mondays within that year. This gives you an anchor point within each of those months, from which you can calculate a weekday for any other day of a particular month, by substracting the amount of days of the date, from the day offset given by the anchor, and then applying modulo **7** at the end. Here's a few examples:
+Remember: The year's reference weekday is the same as the weekday of each of those anchor dates. For example, if the reference weekday is a Monday, that means that **3/1**, **7/2**, **7/3**, **4/4**, **2/5**, **6/6**, **4/7**, **8/8**, **5/9**, **10/10**, **7/11** and **12/12** were all Mondays within that year. This gives you an anchor point within each of those months, from which you can calculate a weekday for any other day of a particular month, by substracting the amount of days of the date, from the day offset given by the anchor, and then applying modulo **7** at the end. Here's a few examples:
 
 - 14/3, year's reference weekday: Tuesday -> 7/3 anchor -> `14 - 7 mod 7 = 0` -> +0 offset from Tuesday -> Tuesday 
 - 25/6, year's reference weekday: Friday -> 6/6 anchor -> `25 - 6 mod 7 = 5` -> +5/-2 offset from Friday -> Wednesday
@@ -140,11 +152,41 @@ For ex. if the final deduced weekday would be a Saturday, for a leap year and ei
 
 Combining the three steps of figuring out the year's reference weekday, day-month offset and applying the final exception, you can finally arrive at the deduced weekday. Here's some examples:
 
-- 14th of September, 1986 -> 1980-Friday +6+1=Friday -> 5/9 anchor -> 14-5 mod 7 = +2 offset from Friday -> Sunday
-- 27th of March, 1997 -> 1990-Wednesday +7+2=Friday -> 7/3 anchor -> 27-7 mod 7 = +6/-1 offset from Friday -> Thursday
-- 8th of February, 2004 -> 2000-Tuesday +4+1=Sunday -> 7/2 anchor -> 8-7 mod 7 = +1 offset, but final exception applies, so +0 offset from Sunday -> Sunday
-- 19th of June, 2016 -> 2010-Sunday +6+2=Monday -> 6/6 anchor -> 19-6 mod 7 = +6/-1 offset from Monday -> Sunday
-- 21st of November, 2026 -> 2020-Saturday +6+1=Saturday -> 7/11 anchor -> 21-7 mod 7 = +0 offset from Saturday -> Saturday
+- 14th of September, 1986 -> 1980-Friday -> +6+1=Friday -> 5/9 anchor -> `(14 - 5) mod 7 = 2` -> +2 offset from Friday -> Sunday
+- 27th of March, 1997 -> 1990-Wednesday -> +7+2=Friday -> 7/3 anchor -> `(27 - 7) mod 7 = 6` -> +6/-1 offset from Friday -> Thursday
+- 8th of February, 2004 -> 2000-Tuesday -> +4+1=Sunday -> 7/2 anchor -> `(8 - 7) mod 7 = 1` -> +1 offset, but final exception applies, so +0 offset from Sunday -> Sunday
+- 19th of June, 2016 -> 2010-Sunday -> +6+2=Monday -> 6/6 anchor -> `(19 - 6) mod 7 = 6` -> +6/-1 offset from Monday -> Sunday
+- 21st of November, 2026 -> 2020-Saturday -> +6+1=Saturday -> 7/11 anchor -> `(21 - 7) mod 7 = 0` -> +0 offset from Saturday -> Saturday
+
+---
+
+## Extending the years range
+
+> [!NOTE]
+> The Gregorian calendar had only been introduced in **1582**, with different countries slowly adopting it over the following years. For this reason, deducing a weekday for years before **1600** won't really be historically accurate. If you're okay with ignoring this fact, the same math and logic still applies for years before **1600**.
+
+To deduce the reference weekday for any year, there's a few more rules to remember:
+
+- Years divisible by **400** (1600, 2000, 2400, etc.) have **Tuesday** as their reference weekday. You can consider those century anchors.
+- Within each 400 years period, for each following century (+100, +200 or +300 from the century anchor), the sequence of reference weekdays is: **Sunday, Friday, Wednesday** (-2 shift for each). This lets you deduce the reference weekday for a given century.
+- From here, you can apply the "odd + 11" method (see below) to obtain the reference weekday for the target year.
+
+The "Odd + 11" method:
+
+1. Start with the last two digits of the target year, and consider them your current number.
+2. If the current number is odd: add 11, otherwise skip this step.
+3. Divide the current number by 2 (this is a required step).
+4. If the current number is odd: add 11, otherwise skip this step.
+5. Compute `7 - (n mod 7)` (where `n` is the current number). This is equivalent to computing `n mod 7` and simply flipping the sign of the result.
+6. The result is an offset from the century's reference weekday, that you can then use to obtain the reference weekday for the target year.
+
+Here are some examples:
+
+- 1673 -> 1600-Tuesday -> `(73 + 11) / 2 = 42` -> `42 mod 7 = 0` (no sign flip required) -> +0 offset from Tuesday -> Tuesday
+- 1764 -> 1700-Sunday -> `64 / 2 = 32` -> `32 mod 7 = 4` (-4/+3 after sign flip) -> +3 offset from Sunday -> Wednesday
+- 1847 -> 1800-Friday -> `(47 + 11) / 2 = 29` -> `(29 + 11) mod 7 = 5` (-5/+2 after sign flip) -> +2 offset from Friday -> Sunday
+- 1929 -> 1900-Wednesday -> `(29 + 11) / 2 = 20` -> `20 mod 7 = 6` (-6/+1 after sign flip) -> +1 offset from Wednesday -> Thursday
+- 2026 -> 2000-Tuesday -> `26 / 2 = 13` -> `(13 + 11) mod 7 = 3` (-3/+4 after sign flip) -> -3 offset from Tuesday -> Saturday
 
 ---
 
