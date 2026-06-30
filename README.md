@@ -23,7 +23,7 @@ To compute the weekday of a particular date, you have to find a reference weekda
 # Glossary
 
 - Leap year - A year that is either divisible by 400, or is divisible by 4 and isn't divisible by 100. For the practical range, this can be reduced to a simple "divisible by 4" rule.
-- Reference weekday/year/decade/century - The "doomsday weekday" associated with a given year, decade or century, usually represented as a pair in form of "YYYY-Weekday". Years may also come with their precomputed reference weekday at the end for convenience, ex: **2000-Tuesday**.
+- Reference weekday/year/decade/century - The "doomsday weekday" associated with a given year, decade or century, usually represented as a precomputed pair of a year and it's reference weekday in form of "YYYY-Weekday" for convenience.
 - Anchor date - A fixed "day/month" pair, that defines the point in a year where the year’s reference weekday matches the weekday of that date. The first number is always the amount of days within a month, not the number representing the month itself.
 
 All calculations related to weekdays have to be done by applying the **"modulo 7" (%)** operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down. For the purposes of this explanation, the following weekday representation offset values are used:
