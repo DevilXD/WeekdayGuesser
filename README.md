@@ -14,16 +14,16 @@ It’s possible for you to deduce the weekday of any given date, by following a 
 To compute the weekday of a particular date, you have to find a reference weekday for a given year first, and then apply an offset based on the combined month and day of the month.
 
 > [!Note]
-> For simplicity's sake, the explanation below is intentionally modified and limited to a **1900-2099** years theorethical range, and **1980-2020** years practical range. See the "Extending the years range" section at the end for more information.
+> For simplicity's sake, the explanation below is intentionally modified and limited to a **1900-2099** theoretical range, and **1980-2020** practical range. See the "Extending the years range" section at the end for more information.
 >
-> The intended purpose of this is to use it as a party trick for deducing the weekday another person was born on. This works for any other date from within the theorethical range though.
+> The intended purpose of this is to use it as a party trick for deducing the weekday on which another person was born on. This works for any other date from within the theoretical range though.
 
 ---
 
 # Glossary
 
 - Leap year - A year that is either divisible by 400, or is divisible by 4 and isn't divisible by 100. For the practical range, this can be reduced to a simple "divisible by 4" rule.
-- Reference weekday/year/decade/century - The "doomsday weekday" associated with a given year, decade or century, usually represented as a precomputed pair of a year and it's reference weekday in form of "YYYY-Weekday" for convenience.
+- Reference weekday/year/decade/century - The "doomsday weekday" associated with a given year, decade or century, usually represented as a precomputed pair of a year and its reference weekday in form of "YYYY-Weekday" for convenience.
 - Anchor date - A fixed "day/month" pair, that defines the point in a year where the year’s reference weekday matches the weekday of that date. The first number is always the amount of days within a month, not the number representing the month itself.
 
 All calculations related to weekdays have to be done by applying the **"modulo 7" (%)** operation on the result. This allows the weekdays to rotate around from Sunday back to Monday when going up, and Monday to Sunday when going down. For the purposes of this explanation, the following weekday representation offset values are used:
@@ -48,7 +48,7 @@ You need to memorize a few things:
 
 - Reference weekday for the year **2000** is **Tuesday**.
 - Reference weekday for the year **1990** is **Wednesday**.
-- Changing reference decades follows a **1-2-1-1** pattern. The direction and first step can be deduced from the two memorized reference decades.
+- Changing reference decades follows a **1-2-1-2** pattern. The direction and first step can be deduced from the two memorized reference decades.
 
 When changing the reference decade, you have to follow the 1-2-1-2 pattern:
 
@@ -69,7 +69,7 @@ You need to memorize a few more things:
 - When counting the years up within a decade, the reference weekday changes up by **1**. When counting down, it changes down by **1**.
 - When going up from a non-leap year to a leap year, the reference weekday changes up by **2** instead. Similarly, when going down from a leap year to a non-leap year, it changes down by **2** instead as well.
 
-Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit, to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference day. Note the format is: `(years + leap) mod 7 = result`. Here's a few examples:
+Once you have the reference decade that's close to the target year, you can quickly arrive at the reference weekday for a given year, by adding the amount of years in the last digit, to the amount of leap years encountered along the way, and taking a modulo 7 operation at the end. The result is an offset from the decade's reference weekday. Note the format is: `(years + leap) mod 7 = result`. Here's a few examples:
 
 - 1986 -> 1980-Friday -> 1984 was leap -> `(6 + 1) mod 7 = 0` -> +0 offset from Friday -> Friday
 - 1999 -> 1990-Wednesday -> 1992 and 1996 were leap -> `(9 + 2) mod 7 = 4` -> +4/-3 offset from Wednesday -> Sunday
@@ -77,14 +77,14 @@ Once you have the reference decade that's close to the target year, you can quic
 - 2014 -> 2010-Sunday -> 2012 was leap -> `(4 + 1) mod 7 = 5` -> +5/-2 offset from Sunday -> Friday
 - 2026 -> 2020-Saturday -> 2024 was leap -> `(6 + 1) mod 7 = 0` -> +0 offset from Saturday -> Saturday
 
-It's also possible to do this via subtraction, but with a catch - you need to watch out closely for the leap -> non-leap transition, as it's easy to forget to account for it here. For the example year 1999, you can use 2000-Tuesday as the starting point, and simply go back by 1 year. Accounting for the year 2000 being a leap and 1999 being non-leap, you need to substract 2 instead of 1, so for the 2000-Tuesday reference, going back by 2 gives you Sunday immediately. Similarly, going 1 more year back requires you to only substract 1 from the weekday offset (non-leap to non-leap transition), giving you Saturday.
+It's also possible to do this via subtraction, but with a catch - you need to watch out closely for the leap -> non-leap transition, as it's easy to forget to account for it here. For the example year 1999, you can use 2000-Tuesday as the starting point, and simply go back by 1 year. Accounting for the year 2000 being a leap and 1999 being non-leap, you need to subtract 2 instead of 1, so for the 2000-Tuesday reference, going back by 2 gives you Sunday immediately. Similarly, going 1 more year back requires you to only subtract 1 from the weekday offset (non-leap to non-leap transition), giving you Saturday.
 
 ### Speedup: Memorizing reference weekdays for a particular range of years
 
 The fastest way of arriving at the reference weekday for a particular year, is done by simply memorizing a bunch of year-weekday pairs. You have a lot of flexibility here:
 
 - You can memorize the reference decades only (1980, 1990, 2000, 2010, etc.), allowing you to bypass having to use the **1-2-1-2** rule and calculating the offset.
-- You can memorize a particular range of years (1980-2020 for ex.), allowing you to skip all year-related offset calculations entirely.
+- You can memorize a particular range of years (1980-2020 for example), allowing you to skip all year-related offset calculations entirely.
 
 The downside here is having to memorize a lot more information, rather than a bunch of rules explaining how to arrive at the answer. The upside is a huge increase in the weekday deduction speed, of course. Going this route is up for you to decide. Here are the pre-computed weekdays for the **1980-2020** years range:
 
@@ -104,13 +104,13 @@ The downside here is having to memorize a lot more information, rather than a bu
 
 This is the second step of the weekday-deduction process. The whole algorithm relies on the idea of date anchors: special day-month pairs, for which **the year's reference weekday is the same as the weekday of that date.**
 
-There's a few more rules you need to memorize:
+There're a few more rules you need to memorize:
 
 - For all even-numbered months, with **February (2)** as the only exception, the same-numbered day within the month falls on the reference weekday. This gives you **4/4**, **6/6**, **8/8**, **10/10** and **12/12** as anchor dates.
 - For all other months in order, you need to memorize this sequence: **3-7-7_2-4-5-7**. This gives you **3/1**, **7/2**, **7/3**, **2/5**, **4/7**, **5/9** and **7/11** as anchors.
 - The **5/9** and **7/11** anchors are reversible, which means that **9/5** and **11/7** can also be treated as anchors. The PI day (**14/3**) is also an anchor, as well as the last day of February (28th for non-leap years, 29th for leap years).
 
-Remember: The year's reference weekday is the same as the weekday of each of those anchor dates. For example, if the reference weekday is a Monday, that means that **3/1**, **7/2**, **7/3**, **4/4**, **2/5**, **6/6**, **4/7**, **8/8**, **5/9**, **10/10**, **7/11** and **12/12** were all Mondays within that year. This gives you an anchor point within each of those months, from which you can calculate a weekday for any other day of a particular month, by substracting the amount of days of the date, from the day offset given by the anchor, and then applying modulo **7** at the end. Here's a few examples:
+Remember: The year's reference weekday is the same as the weekday of each of those anchor dates. For example, if the reference weekday is a Monday, that means that **3/1**, **7/2**, **7/3**, **4/4**, **2/5**, **6/6**, **4/7**, **8/8**, **5/9**, **10/10**, **7/11** and **12/12** were all Mondays within that year. This gives you an anchor point within each of those months, from which you can calculate a weekday for any other day of a particular month, by subtracting the amount of days of the date, from the day offset given by the anchor, and then applying modulo **7** at the end. Here's a few examples:
 
 - 14/3, year's reference weekday: Tuesday -> 7/3 anchor -> `14 - 7 mod 7 = 0` -> +0 offset from Tuesday -> Tuesday 
 - 25/6, year's reference weekday: Friday -> 6/6 anchor -> `25 - 6 mod 7 = 5` -> +5/-2 offset from Friday -> Wednesday
@@ -139,14 +139,14 @@ And here's a breakdown per offset type, containing all anchor day-month pairs:
 
 ## Final exception adjustment for leap years
 
-As the very last step in the deduction process, one needs to test for a specific exception. For leap years that haven't passed through the 29th of February yet, you need to substract 1 from the final result to obtain the correct weekday.
+As the very last step in the deduction process, one needs to test for a specific exception. For leap years that haven't passed through the 29th of February yet, you need to subtract 1 from the final result to obtain the correct weekday.
 
 The general rules are simple:
 
 - The year is a leap year.
 - The month is either January or February.
 
-For ex. if the final deduced weekday would be a Saturday, for a leap year and either January or February as the month, the actuall correct weekday deduction would be Friday instead.
+For example, if the final deduced weekday would be a Saturday, for a leap year and either January or February as the month, the actually correct weekday deduction would be Friday instead.
 
 ## Putting it all together
 
@@ -163,9 +163,9 @@ Combining the three steps of figuring out the year's reference weekday, day-mont
 ## Extending the years range
 
 > [!NOTE]
-> The Gregorian calendar had only been introduced in **1582**, with different countries slowly adopting it over the following years. For this reason, deducing a weekday for years before **1600** won't really be historically accurate. If you're okay with ignoring this fact, the same math and logic still applies for years before **1600**.
+> The Gregorian calendar had been introduced in **1582**, with different countries slowly adopting it over the following years. For this reason, deducing a weekday for years before **1600** won't really be historically accurate. If you're okay with ignoring this fact, the same math and logic still applies for years before **1600**.
 
-To deduce the reference weekday for any year, there's a few more rules to remember:
+To deduce the reference weekday for any year, there're a few more rules to remember:
 
 - Years divisible by **400** (1600, 2000, 2400, etc.) have **Tuesday** as their reference weekday. You can consider those century anchors.
 - Within each 400 years period, for each following century (+100, +200 or +300 from the century anchor), the sequence of reference weekdays is: **Sunday, Friday, Wednesday** (-2 shift for each). This lets you deduce the reference weekday for a given century.
@@ -197,8 +197,8 @@ The Python script lets you test your deduction skills in the 5 categories/modes 
 - There's currently no interface to change the script's configuration, other than by editing the code directly. This may be resolved in future versions of the script.
 - More than one mode can be enabled at the same time. The weights specify how often each deduction type appears relative to the others. Setting the weight to zero prevents the type from appearing.
 - There are three types of input methods: "general value", "offset" and "weekday". General value expects any positive or negative integer, offset expects only a range between -6 and 6, and weekday expects a name of a weekday.
-- The weekday's name can be specified by only typing in enough letters, that allow for distinguishing the one and only weekday that matches. This is done to reduce the time wasted on typing in the answer.
-- The "weekday" input method is currently disabled for `FULL_DATE` and `YEAR_ONLY` modes, and has been replaced by an alternative input method, that significantly speeds up weekday input. The keys ZXCVBNM (the lowest horizontal row of letters on a QWERTY keyboard) are mapped directly to the Monday-Sunday weekdays range. Simply pressing the corresponding key inputs the weekday immediately, without the need of pressing Enter afterwards.
+- The weekday's name can be specified by typing only enough letters to distinguish it from the others. This is done to reduce the time wasted on typing in the answer.
+- The "weekday" input method is currently disabled for `FULL_DATE` and `YEAR_ONLY` modes, and has been replaced by an alternative input method, that significantly speeds up weekday input. The keys ZXCVBNM (the lowest horizontal row of letters on a QWERTY keyboard) are mapped directly to the Monday-Sunday weekdays range. Simply pressing the corresponding key inputs the weekday immediately, without the need to press Enter afterwards.
 
 ### FULL_DATE: Deduce the weekday for a specific date
 
@@ -212,7 +212,7 @@ The current practice range is set to 1990-2010, but can be changed by modifying 
 ### MONTH_ONLY: Deduce all day anchor offsets for a specific month
 
 You're asked for all day anchor offsets for a specific month. Input all of them without spaces to answer.
-Example answer for January: `310172431`, which corresponds to 3rd, 10th, 17th, 24th and 31th of January as anchors.
+Example answer for January: `310172431`, which corresponds to 3rd, 10th, 17th, 24th and 31st of January as anchors.
 The initial `0` can be optionally omitted when inputting the answer for February, March and November.
 
 ### DAY_MONTH_ONLY: Deduce the shift value for a specific month and day
